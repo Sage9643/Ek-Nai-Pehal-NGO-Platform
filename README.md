@@ -27,6 +27,8 @@ Unlike traditional static NGO websites, the platform functions as a lightweight 
 
 **Backend API:** https://ek-nai-pehal-ngo-platform.onrender.com
 
+**Gallery API:** https://ek-nai-pehal-ngo-platform.onrender.com/api/gallery
+
 ## ✨ Features
 
 ### 🌍 Public Website
