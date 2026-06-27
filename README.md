@@ -21,10 +21,15 @@ The platform enables visitors to explore NGO initiatives, volunteer, donate, con
 Unlike traditional static NGO websites, the platform functions as a lightweight **Content Management System (CMS)** where updates made by administrators are instantly reflected on the public website without modifying any code.
 
 ---
+### 🌐 Live Demo
 
-# ✨ Features
+**Frontend:** https://ek-nai-pehal-ngo-platform.vercel.app
 
-## 🌍 Public Website
+**Backend API:** https://ek-nai-pehal-ngo-platform.onrender.com
+
+## ✨ Features
+
+### 🌍 Public Website
 
 - Responsive Landing Page
 - About NGO
@@ -39,7 +44,7 @@ Unlike traditional static NGO websites, the platform functions as a lightweight 
 
 ---
 
-## 🤖 AI Assistant
+### 🤖 AI Assistant
 
 The integrated chatbot is powered by **Google Gemini** and is trained on a custom NGO knowledge base.
 
@@ -56,43 +61,43 @@ It can answer questions regarding:
 
 ---
 
-## 🔐 Admin Dashboard
+### 🔐 Admin Dashboard
 
 A secure JWT-authenticated dashboard allows administrators to manage the website without touching the source code.
 
-### Dashboard
+#### Dashboard
 
 - Live Statistics
 - Recent Activity Feed
 
-### Volunteer Management
+#### Volunteer Management
 
 - View Volunteers
 - Search Volunteers
 - View Details
 - Delete Records
 
-### Contact Management
+#### Contact Management
 
 - View Contact Requests
 - Search Queries
 - Delete Requests
 
-### Event Management
+#### Event Management
 
 - Add Events
 - Edit Events
 - Delete Events
 - Automatically updates the public website
 
-### Gallery Management
+#### Gallery Management
 
 - Upload Images
 - Edit Image Details
 - Delete Images
 - Featured Images Support
 
-### Donation Management
+#### Donation Management
 
 - View Donations
 - Donation Status Tracking
@@ -101,7 +106,7 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 
 ---
 
-# 🏗 Project Architecture
+## 🏗 Project Architecture
 
 ```
                      Public Users
@@ -125,16 +130,17 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
-## Frontend
+### Frontend
 
 - React.js
 - React Router
 - Axios
 - CSS3
+- Vite
 
-## Backend
+### Backend
 
 - Node.js
 - Express.js
@@ -142,22 +148,22 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 - bcryptjs
 - Mongoose
 
-## Database
+### Database
 
 - MongoDB Atlas
 
-## AI Integration
+### AI Integration
 
 - Google Gemini API
 
-## Deployment
+### Deployment
 
-- Frontend: Vercel *(planned)*
-- Backend: Render *(planned)*
+- Frontend: Vercel 
+- Backend: Render 
 
 ---
 
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```
 Ek-Nai-Pehal-NGO-Platform
@@ -188,15 +194,15 @@ Ek-Nai-Pehal-NGO-Platform
 
 ---
 
-# 🚀 Installation
+## 🚀 Installation
 
-## Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/Sage9643/Ek-Nai-Pehal-NGO-Platform.git
 ```
 
-## Backend
+### Backend
 
 ```bash
 cd server
@@ -206,7 +212,7 @@ npm install
 npm run dev
 ```
 
-## Frontend
+### Frontend
 
 ```bash
 cd client
@@ -218,52 +224,84 @@ npm run dev
 
 ---
 
-# 🔑 Environment Variables
+## 🔑 Environment Variables
 
-## Backend (.env)
+### Backend (.env)
 
 ```env
-PORT=
+# Server
+PORT=5000
 
+# MongoDB
 MONGODB_URI=
 
+# Gemini API
 GEMINI_API_KEY=
 
+# Admin Credentials
 ADMIN_EMAIL=
-
 ADMIN_PASSWORD_HASH=
 
+# Authentication
 JWT_SECRET=
-
-JWT_EXPIRES_IN=
+JWT_EXPIRES_IN=7d
 ```
 
 ---
 
-## Frontend (.env)
+### Frontend (.env)
 
 ```env
+# Backend API URL
 VITE_API_BASE_URL=
 ```
 
 ---
 
-# 📸 Screenshots
+## 📸 Screenshots
 
-*(Will be added after deployment)*
+###  Home Page
 
-- Home
-- Admin Dashboard
-- AI Chatbot
-- Events
-- Gallery
-- Donation Portal
+<p>
+  <img src="docs/home.png" width="900"/>
+</p>
+
+###  Admin Dashboard
+
+<p>
+  <img src="docs/admin-dashboard.png" width="900"/>
+</p>
+
+###  AI Chatbot
+
+<p>
+  <img src="docs/chatbot.png" width="300"/>
+</p>
+
+###  Events
+
+<p>
+  <img src="docs/events.png" width="900"/>
+</p>
+
+###  Gallery
+
+<p>
+  <img src="docs/gallery.png" width="900"/>
+</p>
+
+###  Donation Portal
+
+<p>
+  <img src="docs/donation.png" width="900"/>
+</p>
+
 
 ---
 
-# 🎯 Current Status
+## 🎯 Current Status
 
-### ✅ Implemented
+#### ✅ Implemented
 
 - JWT Authentication
 - AI Chatbot
@@ -278,7 +316,7 @@ VITE_API_BASE_URL=
 
 ---
 
-### 🚧 Under Development
+#### 🚧 Under Development
 
 The project is actively being improved with the following planned features:
 
@@ -294,14 +332,14 @@ The project is actively being improved with the following planned features:
 
 ---
 
-# 🤝 Contributing
+## 🤝 Contributing
 
 Contributions, suggestions and improvements are welcome.
 Feel free to fork the repository and submit a pull request.
 
 ---
 
-# 📄 License
+## 📄 License
 
 This project is licensed under the MIT License.
 
