@@ -121,17 +121,23 @@ export default function AdminSidebar({ isOpen, onClose }) {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center gap-3 p-4 border-b border-green-800">
-          {/* NGO Logo */}
-            <img 
-              src="/image/ek nai pehal logo.png" 
-              alt="Ek Nai Pehal Logo" 
-              className="w-10 h-10 object-contain rounded-full" 
-            />
-        </div>
-        <div className="border-b border-white/10 px-6 py-5">
-          <p className="font-playfair text-lg font-bold">Ek Nai Pehal</p>
-          <p className="text-xs uppercase tracking-widest text-white/50">Admin Portal</p>
+        <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5">
+        {/* NGO Logo */}
+          <img 
+            src="/ek nai pehal logo.png"
+            alt="Ek Nai Pehal Logo" 
+            className="w-10 h-10 object-contain rounded-full" 
+          />
+      
+          {/* Text Branding Container */}
+          <div className="flex flex-col">
+            <p className="font-playfair text-lg font-bold text-white leading-tight">
+              Ek Nai Pehal
+            </p>
+            <p className="text-xs uppercase tracking-widest text-white/50 font-semibold leading-none mt-1">
+              Admin Portal
+            </p>
+          </div>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
