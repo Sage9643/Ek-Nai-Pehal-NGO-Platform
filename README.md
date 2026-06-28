@@ -254,8 +254,9 @@ JWT_EXPIRES_IN=7d
 ### Frontend (.env)
 
 ```env
-# Backend API URL
-VITE_API_BASE_URL=
+VITE_API_BASE_URL=http://localhost:5000/api   # Local
+# Production:
+# https://ek-nai-pehal-ngo-platform.onrender.com/api
 ```
 
 ---
