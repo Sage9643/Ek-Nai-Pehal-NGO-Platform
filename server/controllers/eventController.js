@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * GET /api/events
@@ -6,10 +7,9 @@ const Event = require('../models/Event');
  */
 const getEvents = async (req, res, next) => {
   try {
-    const events = await Event.find().sort({ date:-1 });
+    const events = await Event.find().sort({ date: -1 });
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Events fetched successfully',
       data: events,
       count: events.length,

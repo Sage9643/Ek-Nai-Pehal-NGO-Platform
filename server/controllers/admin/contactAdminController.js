@@ -1,4 +1,6 @@
 const ContactQuery = require('../../models/ContactQuery');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 const DEFAULT_LIMIT = 10;
 
@@ -32,8 +34,7 @@ const getContactRequests = async (req, res, next) => {
       ContactQuery.countDocuments(filter),
     ]);
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       data: {
         contacts,
         pagination: {
@@ -57,15 +58,10 @@ const deleteContactRequest = async (req, res, next) => {
     const contact = await ContactQuery.findByIdAndDelete(req.params.id);
 
     if (!contact) {
-      const error = new Error('Contact request not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Contact request not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Contact request deleted successfully',
-    });
+    sendSuccess(res, { message: 'Contact request deleted successfully' });
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,6 @@
 const Donation = require('../../models/Donation');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 const DEFAULT_LIMIT = 10;
 const DONATION_STATUSES = ['Pending', 'Accepted', 'Scheduled', 'Received', 'Completed'];
@@ -38,8 +40,7 @@ const getDonations = async (req, res, next) => {
       Donation.countDocuments(filter),
     ]);
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       data: {
         donations,
         pagination: {
@@ -63,9 +64,9 @@ const updateDonationStatus = async (req, res, next) => {
     const { status } = req.body;
 
     if (!DONATION_STATUSES.includes(status)) {
-      const error = new Error(`Status must be one of: ${DONATION_STATUSES.join(', ')}`);
-      error.statusCode = 400;
-      return next(error);
+      return next(
+        new AppError(`Status must be one of: ${DONATION_STATUSES.join(', ')}`, 400)
+      );
     }
 
     const donation = await Donation.findByIdAndUpdate(
@@ -75,13 +76,10 @@ const updateDonationStatus = async (req, res, next) => {
     );
 
     if (!donation) {
-      const error = new Error('Donation not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Donation not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Donation status updated successfully',
       data: donation,
     });
@@ -98,15 +96,10 @@ const deleteDonation = async (req, res, next) => {
     const donation = await Donation.findByIdAndDelete(req.params.id);
 
     if (!donation) {
-      const error = new Error('Donation not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Donation not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Donation deleted successfully',
-    });
+    sendSuccess(res, { message: 'Donation deleted successfully' });
   } catch (error) {
     next(error);
   }

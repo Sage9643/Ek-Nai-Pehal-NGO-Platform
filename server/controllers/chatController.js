@@ -1,4 +1,5 @@
 const { generateChatResponse } = require('../services/geminiService');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * POST /api/chat
@@ -7,26 +8,15 @@ const { generateChatResponse } = require('../services/geminiService');
 const sendChatMessage = async (req, res, next) => {
   try {
     const { message } = req.body;
-
-    if (!message || !message.trim()) {
-      const error = new Error('Message is required');
-      error.statusCode = 400;
-      return next(error);
-    }
-
     const reply = await generateChatResponse(message.trim());
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Chat response generated successfully',
       data: { reply },
     });
   } catch (error) {
-    res.status(500).json({
-        success: false,
-        message: error.message
-    });
-}
+    next(error);
+  }
 };
 
 module.exports = { sendChatMessage };

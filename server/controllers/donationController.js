@@ -1,4 +1,5 @@
 const Donation = require('../models/Donation');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * POST /api/donations
@@ -8,8 +9,8 @@ const createDonation = async (req, res, next) => {
   try {
     const donation = await Donation.create(req.body);
 
-    res.status(201).json({
-      success: true,
+    sendSuccess(res, {
+      statusCode: 201,
       message: 'Donation inquiry submitted successfully',
       data: donation,
     });

@@ -1,4 +1,6 @@
 const Event = require('../../models/Event');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 const DEFAULT_LIMIT = 10;
 const EVENT_CATEGORIES = ['Education', 'Workshop', 'Community', 'Celebration', 'Visit'];
@@ -33,8 +35,7 @@ const getEvents = async (req, res, next) => {
       Event.countDocuments(filter),
     ]);
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       data: {
         events,
         pagination: {
@@ -57,8 +58,8 @@ const createEvent = async (req, res, next) => {
   try {
     const event = await Event.create(req.body);
 
-    res.status(201).json({
-      success: true,
+    sendSuccess(res, {
+      statusCode: 201,
       message: 'Event created successfully',
       data: event,
     });
@@ -78,13 +79,10 @@ const updateEvent = async (req, res, next) => {
     });
 
     if (!event) {
-      const error = new Error('Event not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Event not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Event updated successfully',
       data: event,
     });
@@ -101,15 +99,10 @@ const deleteEvent = async (req, res, next) => {
     const event = await Event.findByIdAndDelete(req.params.id);
 
     if (!event) {
-      const error = new Error('Event not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Event not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Event deleted successfully',
-    });
+    sendSuccess(res, { message: 'Event deleted successfully' });
   } catch (error) {
     next(error);
   }

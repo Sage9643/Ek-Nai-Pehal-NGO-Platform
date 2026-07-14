@@ -1,4 +1,5 @@
 const Volunteer = require('../models/Volunteer');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * POST /api/volunteers
@@ -8,8 +9,8 @@ const createVolunteer = async (req, res, next) => {
   try {
     const volunteer = await Volunteer.create(req.body);
 
-    res.status(201).json({
-      success: true,
+    sendSuccess(res, {
+      statusCode: 201,
       message: 'Volunteer registered successfully',
       data: volunteer,
     });

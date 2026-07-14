@@ -1,4 +1,6 @@
 const Gallery = require('../../models/Gallery');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 const DEFAULT_LIMIT = 10;
 
@@ -32,8 +34,7 @@ const getGalleryImages = async (req, res, next) => {
       Gallery.countDocuments(filter),
     ]);
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       data: {
         images,
         pagination: {
@@ -56,8 +57,8 @@ const createGalleryImage = async (req, res, next) => {
   try {
     const image = await Gallery.create(req.body);
 
-    res.status(201).json({
-      success: true,
+    sendSuccess(res, {
+      statusCode: 201,
       message: 'Gallery image added successfully',
       data: image,
     });
@@ -77,13 +78,10 @@ const updateGalleryImage = async (req, res, next) => {
     });
 
     if (!image) {
-      const error = new Error('Gallery image not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Gallery image not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Gallery image updated successfully',
       data: image,
     });
@@ -100,15 +98,10 @@ const deleteGalleryImage = async (req, res, next) => {
     const image = await Gallery.findByIdAndDelete(req.params.id);
 
     if (!image) {
-      const error = new Error('Gallery image not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Gallery image not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Gallery image deleted successfully',
-    });
+    sendSuccess(res, { message: 'Gallery image deleted successfully' });
   } catch (error) {
     next(error);
   }

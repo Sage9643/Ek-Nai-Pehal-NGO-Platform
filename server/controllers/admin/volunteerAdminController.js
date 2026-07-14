@@ -1,4 +1,6 @@
 const Volunteer = require('../../models/Volunteer');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 const DEFAULT_LIMIT = 10;
 
@@ -32,8 +34,7 @@ const getVolunteers = async (req, res, next) => {
       Volunteer.countDocuments(filter),
     ]);
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       data: {
         volunteers,
         pagination: {
@@ -57,15 +58,10 @@ const deleteVolunteer = async (req, res, next) => {
     const volunteer = await Volunteer.findByIdAndDelete(req.params.id);
 
     if (!volunteer) {
-      const error = new Error('Volunteer not found');
-      error.statusCode = 404;
-      return next(error);
+      return next(new AppError('Volunteer not found', 404));
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Volunteer deleted successfully',
-    });
+    sendSuccess(res, { message: 'Volunteer deleted successfully' });
   } catch (error) {
     next(error);
   }

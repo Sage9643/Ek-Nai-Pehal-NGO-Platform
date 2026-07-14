@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { env } = require('../../config/env');
+const AppError = require('../../utils/AppError');
+const { sendSuccess } = require('../../utils/apiResponse');
 
 /**
  * POST /api/admin/login
@@ -9,34 +12,27 @@ const adminLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD_HASH || !process.env.ADMIN_JWT_SECRET) {
-      const error = new Error('Admin authentication is not configured');
-      error.statusCode = 500;
-      return next(error);
+    if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD_HASH || !env.ADMIN_JWT_SECRET) {
+      return next(new AppError('Admin authentication is not configured', 500));
     }
 
-    if (email !== process.env.ADMIN_EMAIL) {
-      const error = new Error('Invalid email or password');
-      error.statusCode = 401;
-      return next(error);
+    if (email !== env.ADMIN_EMAIL) {
+      return next(new AppError('Invalid email or password', 401));
     }
 
-    const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
+    const isMatch = await bcrypt.compare(password, env.ADMIN_PASSWORD_HASH);
 
     if (!isMatch) {
-      const error = new Error('Invalid email or password');
-      error.statusCode = 401;
-      return next(error);
+      return next(new AppError('Invalid email or password', 401));
     }
 
     const token = jwt.sign(
-      { email: process.env.ADMIN_EMAIL, role: 'admin' },
-      process.env.ADMIN_JWT_SECRET,
-      { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '24h' }
+      { email: env.ADMIN_EMAIL, role: 'admin' },
+      env.ADMIN_JWT_SECRET,
+      { expiresIn: env.ADMIN_JWT_EXPIRES_IN }
     );
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Login successful',
       data: { token },
     });

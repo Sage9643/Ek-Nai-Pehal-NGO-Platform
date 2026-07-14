@@ -1,5 +1,6 @@
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
+const validate = require('../middleware/validate');
 const { createVolunteer } = require('../controllers/volunteerController');
 
 const router = express.Router();
@@ -37,16 +38,6 @@ const volunteerValidation = [
     .isLength({ min: 10, max: 1000 })
     .withMessage('Motivation must be between 10 and 1000 characters'),
 ];
-
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error(errors.array().map((e) => e.msg).join(', '));
-    error.statusCode = 400;
-    return next(error);
-  }
-  next();
-};
 
 router.post('/', volunteerValidation, validate, createVolunteer);
 

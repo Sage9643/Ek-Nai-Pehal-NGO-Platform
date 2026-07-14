@@ -1,4 +1,5 @@
 const ContactQuery = require('../models/ContactQuery');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * POST /api/contact
@@ -8,8 +9,8 @@ const createContactQuery = async (req, res, next) => {
   try {
     const contactQuery = await ContactQuery.create(req.body);
 
-    res.status(201).json({
-      success: true,
+    sendSuccess(res, {
+      statusCode: 201,
       message: 'Contact query submitted successfully',
       data: contactQuery,
     });

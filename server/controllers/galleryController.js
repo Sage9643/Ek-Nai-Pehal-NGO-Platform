@@ -1,4 +1,5 @@
 const Gallery = require('../models/Gallery');
+const { sendSuccess } = require('../utils/apiResponse');
 
 /**
  * GET /api/gallery
@@ -8,8 +9,7 @@ const getGallery = async (req, res, next) => {
   try {
     const images = await Gallery.find().sort({ createdAt: -1 });
 
-    res.status(200).json({
-      success: true,
+    sendSuccess(res, {
       message: 'Gallery images fetched successfully',
       data: images,
       count: images.length,

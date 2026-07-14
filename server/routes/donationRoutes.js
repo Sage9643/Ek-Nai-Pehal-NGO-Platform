@@ -1,5 +1,6 @@
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
+const validate = require('../middleware/validate');
 const { createDonation } = require('../controllers/donationController');
 
 const router = express.Router();
@@ -38,16 +39,6 @@ const donationValidation = [
     .isLength({ max: 1000 })
     .withMessage('Message cannot exceed 1000 characters'),
 ];
-
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error(errors.array().map((e) => e.msg).join(', '));
-    error.statusCode = 400;
-    return next(error);
-  }
-  next();
-};
 
 router.post('/', donationValidation, validate, createDonation);
 
