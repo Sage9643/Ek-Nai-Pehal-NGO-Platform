@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
+const { formLimiter } = require('../middleware/rateLimiters');
 const { createVolunteer } = require('../controllers/volunteerController');
 
 const router = express.Router();
@@ -39,6 +40,6 @@ const volunteerValidation = [
     .withMessage('Motivation must be between 10 and 1000 characters'),
 ];
 
-router.post('/', volunteerValidation, validate, createVolunteer);
+router.post('/', formLimiter, volunteerValidation, validate, createVolunteer);
 
 module.exports = router;

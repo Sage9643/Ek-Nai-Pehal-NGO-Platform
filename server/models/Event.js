@@ -56,4 +56,15 @@ const eventSchema = new mongoose.Schema(
   }
 );
 
+// Both the public /api/events list and the admin events list sort by date
+// (public) or createdAt (admin), newest first — descending indexes let Mongo
+// satisfy `.sort()` directly from the index instead of an in-memory sort.
+eventSchema.index({ date: -1 });
+eventSchema.index({ createdAt: -1 });
+
+// The public Events page filters by category client-side today, but the
+// admin search also matches on category — index it so that filter stays
+// cheap once it's pushed server-side.
+eventSchema.index({ category: 1 });
+
 module.exports = mongoose.model('Event', eventSchema);

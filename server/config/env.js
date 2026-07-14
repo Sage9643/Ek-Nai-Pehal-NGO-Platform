@@ -19,7 +19,7 @@ const env = cleanEnv(process.env, {
     default: 'info',
   }),
   CLIENT_ORIGIN: str({
-    default: 'http://localhost:5173,https://ek-nai-pehal-ngo-platform.vercel.app',
+    default: 'http://localhost:5174,https://ek-nai-pehal-ngo-platform.vercel.app',
     desc: 'Comma-separated allowed CORS origins',
   }),
   // Admin auth (optional until configured — checked at login time)

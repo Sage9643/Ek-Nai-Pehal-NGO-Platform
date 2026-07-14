@@ -9,13 +9,19 @@ const api = axios.create({
   },
 });
 
-export const getEvents = async () => {
-  const response = await api.get('/events');
+export const getEvents = async ({ page = 1, limit = 9, category } = {}) => {
+  const response = await api.get('/events', {
+    params: {
+      page,
+      limit,
+      ...(category && category !== 'All' ? { category } : {}),
+    },
+  });
   return response.data;
 };
 
-export const getGallery = async () => {
-  const response = await api.get('/gallery');
+export const getGallery = async ({ page = 1, limit = 12 } = {}) => {
+  const response = await api.get('/gallery', { params: { page, limit } });
   return response.data;
 };
 

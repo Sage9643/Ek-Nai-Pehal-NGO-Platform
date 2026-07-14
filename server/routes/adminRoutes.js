@@ -2,6 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
 const adminAuth = require('../middleware/adminAuth');
+const { loginLimiter } = require('../middleware/rateLimiters');
 
 const { adminLogin } = require('../controllers/admin/adminAuthController');
 const { getDashboard } = require('../controllers/admin/dashboardController');
@@ -112,7 +113,7 @@ const galleryValidation = [
     .withMessage('Featured must be true or false'),
 ];
 
-router.post('/login', loginValidation, validate, adminLogin);
+router.post('/login', loginLimiter, loginValidation, validate, adminLogin);
 router.get('/dashboard', adminAuth, getDashboard);
 router.get('/volunteers', adminAuth, getVolunteers);
 router.delete('/volunteers/:id', adminAuth, deleteVolunteer);

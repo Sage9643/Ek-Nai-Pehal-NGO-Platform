@@ -45,4 +45,12 @@ const volunteerSchema = new mongoose.Schema(
   }
 );
 
+// Admin volunteer list always sorts by createdAt descending. Note: the
+// admin search box matches name/email/phone via an unanchored regex
+// ($or of case-insensitive substring matches), which cannot use a
+// standard B-tree index efficiently — a text index would only help for
+// prefix/whole-word matches, not arbitrary substrings, so it's
+// intentionally omitted here rather than added for false confidence.
+volunteerSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model('Volunteer', volunteerSchema);

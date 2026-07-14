@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
+const { chatLimiter } = require('../middleware/rateLimiters');
 const { sendChatMessage } = require('../controllers/chatController');
 
 const router = express.Router();
@@ -14,6 +15,6 @@ const chatValidation = [
     .withMessage('Message must be between 1 and 1000 characters'),
 ];
 
-router.post('/', chatValidation, validate, sendChatMessage);
+router.post('/', chatLimiter, chatValidation, validate, sendChatMessage);
 
 module.exports = router;

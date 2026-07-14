@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
+const { formLimiter } = require('../middleware/rateLimiters');
 const { createDonation } = require('../controllers/donationController');
 
 const router = express.Router();
@@ -40,6 +41,6 @@ const donationValidation = [
     .withMessage('Message cannot exceed 1000 characters'),
 ];
 
-router.post('/', donationValidation, validate, createDonation);
+router.post('/', formLimiter, donationValidation, validate, createDonation);
 
 module.exports = router;

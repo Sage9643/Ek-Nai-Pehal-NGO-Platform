@@ -5,12 +5,16 @@
  * Error shape:     { success: false, message, errors? }
  */
 
-const sendSuccess = (res, { statusCode = 200, message, data, count } = {}) => {
+const sendSuccess = (
+  res,
+  { statusCode = 200, message, data, count, pagination } = {}
+) => {
   const body = { success: true };
 
   if (message) body.message = message;
   if (data !== undefined) body.data = data;
   if (count !== undefined) body.count = count;
+  if (pagination !== undefined) body.pagination = pagination;
 
   return res.status(statusCode).json(body);
 };

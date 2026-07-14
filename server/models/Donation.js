@@ -71,4 +71,14 @@ const donationSchema = new mongoose.Schema(
   }
 );
 
+// Admin dashboard lists donations sorted by newest first, and filters by
+// status (Pending/Accepted/Scheduled/Received/Completed) — this compound
+// index serves both the plain "recent donations" query and the filtered
+// "status=Pending, newest first" query without a collection scan.
+donationSchema.index({ status: 1, createdAt: -1 });
+
+// Admin search box matches against email; indexing it keeps lookups fast
+// as the collection grows, independent of the status filter above.
+donationSchema.index({ email: 1 });
+
 module.exports = mongoose.model('Donation', donationSchema);

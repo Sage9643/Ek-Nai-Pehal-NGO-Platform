@@ -1,28 +1,41 @@
 import { useEffect, useState } from 'react';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import Pagination from '../admin/components/Pagination';
 import { getEvents } from '../services/api';
 
 const categoryFilters = ['All', 'Education', 'Workshop', 'Community', 'Celebration', 'Visit'];
+const PAGE_SIZE = 9;
 
 function Events() {
   const [events, setEvents] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
 
   useEffect(() => {
-    getEvents()
-      .then((res) => { setEvents(res.data || []); setFiltered(res.data || []); })
+    setLoading(true);
+    setError('');
+
+    getEvents({ page, limit: PAGE_SIZE, category: activeFilter })
+      .then((res) => {
+        setEvents(res.data || []);
+        setPagination(
+          res.pagination || { page: 1, totalPages: 1, total: (res.data || []).length }
+        );
+      })
       .catch(() => setError('Failed to load events. Please make sure the backend server is running.'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [page, activeFilter]);
 
   const handleFilter = (cat) => {
     setActiveFilter(cat);
-    setFiltered(cat === 'All' ? events : events.filter((e) => e.category === cat));
+    setPage(1); // reset to first page whenever the category changes
   };
+
+  const filtered = events;
 
   return (
     <>
@@ -67,11 +80,22 @@ function Events() {
             </div>
           )}
           {!loading && !error && filtered.length > 0 && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((event) => (
+                  <EventCard key={event._id} event={event} />
+                ))}
+              </div>
+
+              <div className="mt-10">
+                <Pagination
+                  page={pagination.page}
+                  totalPages={pagination.totalPages}
+                  total={pagination.total}
+                  onPageChange={setPage}
+                />
+              </div>
+            </>
           )}
         </div>
       </section>

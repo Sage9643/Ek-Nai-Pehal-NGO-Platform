@@ -39,4 +39,8 @@ const contactQuerySchema = new mongoose.Schema(
   }
 );
 
+// Admin contact-requests list always sorts by createdAt descending.
+// (See Volunteer.js for why the free-text search fields aren't indexed.)
+contactQuerySchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model('ContactQuery', contactQuerySchema);

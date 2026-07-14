@@ -1,17 +1,27 @@
 import { useEffect, useState } from 'react';
 import { getGallery } from '../services/api';
+import Pagination from '../admin/components/Pagination';
+
+const PAGE_SIZE = 12;
 
 function Gallery() {
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [lightbox, setLightbox] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
 
   useEffect(() => {
     const fetchGallery = async () => {
+      setLoading(true);
+      setError('');
       try {
-        const data = await getGallery();
-        setGalleryImages(data.data);
+        const res = await getGallery({ page, limit: PAGE_SIZE });
+        setGalleryImages(res.data || []);
+        setPagination(
+          res.pagination || { page: 1, totalPages: 1, total: (res.data || []).length }
+        );
       } catch (err) {
         setError('Failed to load gallery images.');
       } finally {
@@ -20,7 +30,7 @@ function Gallery() {
     };
 
     fetchGallery();
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -50,6 +60,7 @@ function Gallery() {
           )}
 
           {!loading && !error && galleryImages.length > 0 && (
+            <>
             <div className="masonry-grid">
               {galleryImages.map((image, i) => (
                 <div
@@ -85,6 +96,16 @@ function Gallery() {
                 </div>
               ))}
             </div>
+
+            <div className="mt-10">
+              <Pagination
+                page={pagination.page}
+                totalPages={pagination.totalPages}
+                total={pagination.total}
+                onPageChange={setPage}
+              />
+            </div>
+            </>
           )}
         </div>
       </section>

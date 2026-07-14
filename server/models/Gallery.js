@@ -40,4 +40,9 @@ const gallerySchema = new mongoose.Schema(
   }
 );
 
+// Both public and admin gallery lists sort by createdAt descending; a
+// compound index with `featured` also serves any "show featured first"
+// query without a second scan/sort step.
+gallerySchema.index({ featured: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Gallery', gallerySchema);

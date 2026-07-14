@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
+const { formLimiter } = require('../middleware/rateLimiters');
 const { createContactQuery } = require('../controllers/contactController');
 
 const router = express.Router();
@@ -33,6 +34,6 @@ const contactValidation = [
     .withMessage('Message must be between 10 and 2000 characters'),
 ];
 
-router.post('/', contactValidation, validate, createContactQuery);
+router.post('/', formLimiter, contactValidation, validate, createContactQuery);
 
 module.exports = router;
