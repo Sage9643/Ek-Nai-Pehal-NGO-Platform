@@ -19,7 +19,7 @@ const env = cleanEnv(process.env, {
     default: 'info',
   }),
   CLIENT_ORIGIN: str({
-    default: 'http://localhost:5174,https://ek-nai-pehal-ngo-platform.vercel.app',
+    default: 'http://localhost:5173,https://ek-nai-pehal-ngo-platform.vercel.app',
     desc: 'Comma-separated allowed CORS origins',
   }),
   // Admin auth (optional until configured — checked at login time)
@@ -27,6 +27,11 @@ const env = cleanEnv(process.env, {
   ADMIN_PASSWORD_HASH: str({ default: '' }),
   ADMIN_JWT_SECRET: str({ default: '' }),
   ADMIN_JWT_EXPIRES_IN: str({ default: '24h' }),
+  // Razorpay (optional until configured — checked at order-creation time,
+  // same lazy-failure pattern as the admin auth vars above, so the server
+  // can still boot and serve every non-payment route without these set)
+  RAZORPAY_KEY_ID: str({ default: '', desc: 'Razorpay public key ID' }),
+  RAZORPAY_KEY_SECRET: str({ default: '', desc: 'Razorpay secret key — server-only, never sent to the client' }),
 });
 
 /** Parse comma-separated CORS origins into an array. */

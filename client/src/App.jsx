@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
@@ -20,27 +20,42 @@ import AdminEvents from './admin/pages/AdminEvents';
 import AdminDonations from './admin/pages/AdminDonations';
 import AdminGallery from './admin/pages/AdminGallery';
 
+/**
+ * Mounts AdminAuthProvider only for routes under /admin. The public site
+ * must never trigger an admin session check (GET /api/admin/me) or depend
+ * on admin authentication state in any way — scoping the provider to this
+ * layout route (instead of wrapping the whole app) is what guarantees that.
+ */
+function AdminSection() {
+  return (
+    <AdminAuthProvider>
+      <Outlet />
+    </AdminAuthProvider>
+  );
+}
+
 function App() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <AdminAuthProvider>
-      <div className="flex min-h-screen flex-col">
-        {!isAdminRoute && <Navbar />}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/volunteer" element={<Volunteer />} />
-            <Route path="/donate" element={<Donate />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
+    <div className="flex min-h-screen flex-col">
+      {!isAdminRoute && <Navbar />}
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/contact" element={<Contact />} />
+
+          <Route path="/admin" element={<AdminSection />}>
+            <Route path="login" element={<AdminLogin />} />
             <Route
-              path="/admin/dashboard"
+              path="dashboard"
               element={
                 <ProtectedRoute>
                   <AdminDashboard />
@@ -48,7 +63,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/volunteers"
+              path="volunteers"
               element={
                 <ProtectedRoute>
                   <AdminVolunteers />
@@ -56,7 +71,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/contact-requests"
+              path="contact-requests"
               element={
                 <ProtectedRoute>
                   <AdminContactRequests />
@@ -64,7 +79,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/events"
+              path="events"
               element={
                 <ProtectedRoute>
                   <AdminEvents />
@@ -72,7 +87,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/donations"
+              path="donations"
               element={
                 <ProtectedRoute>
                   <AdminDonations />
@@ -80,19 +95,19 @@ function App() {
               }
             />
             <Route
-              path="/admin/gallery"
+              path="gallery"
               element={
                 <ProtectedRoute>
                   <AdminGallery />
                 </ProtectedRoute>
               }
             />
-          </Routes>
-        </main>
-        {!isAdminRoute && <Footer />}
-        {!isAdminRoute && <ChatWidget />}
-      </div>
-    </AdminAuthProvider>
+          </Route>
+        </Routes>
+      </main>
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <ChatWidget />}
+    </div>
   );
 }
 

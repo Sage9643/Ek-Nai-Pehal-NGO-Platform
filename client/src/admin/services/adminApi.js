@@ -1,31 +1,48 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-export const TOKEN_KEY = 'adminToken';
+const CSRF_COOKIE_NAME = 'admin_csrf';
+
+/**
+ * Reads a cookie value by name. Used only for the CSRF double-submit
+ * token, which the server deliberately sets as non-httpOnly so this read
+ * is possible. The actual session cookie (admin_token) is httpOnly and
+ * is never readable here — the browser attaches it automatically.
+ */
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
 
 const adminApi = axios.create({
   baseURL: `${API_BASE_URL}/admin`,
   headers: {
     'Content-Type': 'application/json',
   },
+  // Required so the browser sends/receives the httpOnly auth cookie and
+  // the CSRF cookie on cross-origin requests to the API domain.
+  withCredentials: true,
 });
 
 adminApi.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem(TOKEN_KEY);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const method = (config.method || 'get').toUpperCase();
+  const isMutating = !['GET', 'HEAD', 'OPTIONS'].includes(method);
+
+  if (isMutating) {
+    const csrfToken = getCookie(CSRF_COOKIE_NAME);
+    if (csrfToken) {
+      config.headers['X-CSRF-Token'] = csrfToken;
+    }
   }
+
   return config;
 });
 
 adminApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      sessionStorage.removeItem(TOKEN_KEY);
-      if (window.location.pathname !== '/admin/login') {
-        window.location.href = '/admin/login';
-      }
+    if (error.response?.status === 401 && window.location.pathname !== '/admin/login') {
+      window.location.href = '/admin/login';
     }
     return Promise.reject(error);
   }
@@ -33,6 +50,16 @@ adminApi.interceptors.response.use(
 
 export const adminLogin = async (email, password) => {
   const response = await adminApi.post('/login', { email, password });
+  return response.data;
+};
+
+export const adminLogout = async () => {
+  const response = await adminApi.post('/logout');
+  return response.data;
+};
+
+export const getCurrentAdmin = async () => {
+  const response = await adminApi.get('/me');
   return response.data;
 };
 

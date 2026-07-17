@@ -1,9 +1,8 @@
 import { useAdminAuth } from '../hooks/useAdminAuth';
-import { getAdminEmailFromToken } from '../utils/adminToken';
 
 export default function AdminTopbar({ onMenuClick, onLogout }) {
-  const { token } = useAdminAuth();
-  const adminEmail = getAdminEmailFromToken(token);
+  const { email } = useAdminAuth();
+  const adminEmail = email || '';
 
   return (
     <header className="sticky top-0 z-30 border-b border-stone-200 bg-white/95 backdrop-blur-sm">

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const { env, getClientOrigins } = require('./config/env');
 const requestLogger = require('./middleware/requestLogger');
 const errorHandler = require('./middleware/errorHandler');
@@ -38,6 +39,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(requestLogger);
 
 // Defense-in-depth: a generous IP-based ceiling across the whole API.
@@ -69,4 +71,3 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
- 

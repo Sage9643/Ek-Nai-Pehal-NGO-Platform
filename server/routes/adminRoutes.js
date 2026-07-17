@@ -2,9 +2,10 @@ const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
 const adminAuth = require('../middleware/adminAuth');
+const csrfProtection = require('../middleware/csrfProtection');
 const { loginLimiter } = require('../middleware/rateLimiters');
 
-const { adminLogin } = require('../controllers/admin/adminAuthController');
+const { adminLogin, adminLogout, getCurrentAdmin } = require('../controllers/admin/adminAuthController');
 const { getDashboard } = require('../controllers/admin/dashboardController');
 const { getVolunteers, deleteVolunteer } = require('../controllers/admin/volunteerAdminController');
 const { getContactRequests, deleteContactRequest } = require('../controllers/admin/contactAdminController');
@@ -114,21 +115,32 @@ const galleryValidation = [
 ];
 
 router.post('/login', loginLimiter, loginValidation, validate, adminLogin);
-router.get('/dashboard', adminAuth, getDashboard);
-router.get('/volunteers', adminAuth, getVolunteers);
-router.delete('/volunteers/:id', adminAuth, deleteVolunteer);
-router.get('/contact-requests', adminAuth, getContactRequests);
-router.delete('/contact-requests/:id', adminAuth, deleteContactRequest);
-router.get('/events', adminAuth, getEvents);
-router.post('/events', adminAuth, eventValidation, validate, createEvent);
-router.put('/events/:id', adminAuth, eventValidation, validate, updateEvent);
-router.delete('/events/:id', adminAuth, deleteEvent);
-router.get('/donations', adminAuth, getDonations);
-router.put('/donations/:id/status', adminAuth, statusValidation, validate, updateDonationStatus);
-router.delete('/donations/:id', adminAuth, deleteDonation);
-router.get('/gallery', adminAuth, getGalleryImages);
-router.post('/gallery', adminAuth, galleryValidation, validate, createGalleryImage);
-router.put('/gallery/:id', adminAuth, galleryValidation, validate, updateGalleryImage);
-router.delete('/gallery/:id', adminAuth, deleteGalleryImage);
+
+// Every route below this point requires a valid session cookie, and every
+// mutating route below this point also requires a matching CSRF header
+// (see middleware/csrfProtection.js). Hoisting these here removes the
+// per-route repetition that existed before.
+router.use(adminAuth);
+router.use(csrfProtection);
+
+router.post('/logout', adminLogout);
+router.get('/me', getCurrentAdmin);
+
+router.get('/dashboard', getDashboard);
+router.get('/volunteers', getVolunteers);
+router.delete('/volunteers/:id', deleteVolunteer);
+router.get('/contact-requests', getContactRequests);
+router.delete('/contact-requests/:id', deleteContactRequest);
+router.get('/events', getEvents);
+router.post('/events', eventValidation, validate, createEvent);
+router.put('/events/:id', eventValidation, validate, updateEvent);
+router.delete('/events/:id', deleteEvent);
+router.get('/donations', getDonations);
+router.put('/donations/:id/status', statusValidation, validate, updateDonationStatus);
+router.delete('/donations/:id', deleteDonation);
+router.get('/gallery', getGalleryImages);
+router.post('/gallery', galleryValidation, validate, createGalleryImage);
+router.put('/gallery/:id', galleryValidation, validate, updateGalleryImage);
+router.delete('/gallery/:id', deleteGalleryImage);
 
 module.exports = router;

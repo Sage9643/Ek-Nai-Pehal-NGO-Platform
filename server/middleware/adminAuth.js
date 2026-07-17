@@ -1,20 +1,22 @@
 const jwt = require('jsonwebtoken');
+const { AUTH_COOKIE_NAME } = require('../config/cookieOptions');
 
 /**
  * Verify JWT for admin-protected routes.
- * Expects Authorization: Bearer <token>
+ * Reads the token from the httpOnly `admin_token` cookie (not a Bearer
+ * header) — see config/cookieOptions.js for why cookie-based auth was
+ * chosen over client-readable storage.
  */
 const adminAuth = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.[AUTH_COOKIE_NAME];
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
       const error = new Error('Access denied. No token provided.');
       error.statusCode = 401;
       return next(error);
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(
       token,
       process.env.ADMIN_JWT_SECRET || process.env.JWT_SECRET
