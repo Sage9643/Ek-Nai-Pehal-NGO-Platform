@@ -53,6 +53,20 @@ const formLimiter = buildLimiter({
 });
 
 /**
+ * Payment endpoints (create-order / verify). Order creation calls
+ * Razorpay's API per request — the same cost/quota concern as the
+ * chatbot's Gemini calls, not a spam concern like the inquiry forms — so
+ * it gets its own limiter rather than reusing formLimiter's looser budget.
+ * Verify is included under the same limiter since it's part of the same
+ * per-donation-attempt flow and should be governed by the same ceiling.
+ */
+const paymentLimiter = buildLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  message: 'Too many payment attempts. Please try again later.',
+});
+
+/**
  * Blanket API-wide limiter as defense-in-depth against generic scraping/DoS
  * on read endpoints (events, gallery) that have no other throttle.
  */
@@ -66,5 +80,6 @@ module.exports = {
   loginLimiter,
   chatLimiter,
   formLimiter,
+  paymentLimiter,
   globalLimiter,
 };
