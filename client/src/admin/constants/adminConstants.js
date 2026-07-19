@@ -38,3 +38,13 @@ export const STATUS_STYLES = {
   Received: 'bg-sky/10 text-sky ring-sky/20',
   Completed: 'bg-green-50 text-green-700 ring-green-200',
 };
+
+export const TRANSACTION_STATUSES = ['created', 'processing', 'paid', 'failed', 'refunded'];
+
+export const TRANSACTION_STATUS_STYLES = {
+  paid: 'bg-green-50 text-green-700 ring-green-200',
+  failed: 'bg-red-50 text-red-700 ring-red-200',
+  created: 'bg-amber-50 text-amber-700 ring-amber-200',
+  processing: 'bg-amber-50 text-amber-700 ring-amber-200',
+  refunded: 'bg-stone-100 text-stone-600 ring-stone-200',
+};

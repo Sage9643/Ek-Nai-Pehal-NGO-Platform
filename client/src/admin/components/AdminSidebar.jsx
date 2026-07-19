@@ -7,6 +7,7 @@ const navItems = [
   { to: '/admin/contact-requests', label: 'Contact Requests', enabled: true },
   { to: '/admin/events', label: 'Events', enabled: true },
   { to: '/admin/donations', label: 'Donations', enabled: true },
+  { to: '/admin/transactions', label: 'Transactions', enabled: true },
   { to: '/admin/gallery', label: 'Gallery', enabled: true },
 ];
 
@@ -47,6 +48,13 @@ function NavIcon({ name }) {
         d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12v4.875m0-7.875A2.625 2.625 0 1114.625 7.5H12m0 0V3m0 4.875h2.625M21 11.25H3"
       />
     ),
+    transactions: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"
+      />
+    ),
     gallery: (
       <path
         strokeLinecap="round"
@@ -83,6 +91,7 @@ const iconMap = {
   'Contact Requests': 'contacts',
   Events: 'events',
   Donations: 'donations',
+  Transactions: 'transactions',
   Gallery: 'gallery',
 };
 

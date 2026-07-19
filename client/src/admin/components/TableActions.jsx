@@ -1,4 +1,4 @@
-export default function TableActions({ onView, onEdit, onDelete, onUpdateStatus }) {
+export default function TableActions({ onView, onEdit, onDelete, onUpdateStatus, onDownloadReceipt, onDownloadCertificate }) {
   return (
     <div className="flex flex-wrap gap-2">
       {onView && (
@@ -26,6 +26,24 @@ export default function TableActions({ onView, onEdit, onDelete, onUpdateStatus 
           className="rounded-lg px-3 py-1.5 text-xs font-semibold text-saffron ring-1 ring-saffron/20 transition hover:bg-saffron/5"
         >
           Update Status
+        </button>
+      )}
+      {onDownloadReceipt && (
+        <button
+          type="button"
+          onClick={onDownloadReceipt}
+          className="rounded-lg px-3 py-1.5 text-xs font-semibold text-forest ring-1 ring-forest/20 transition hover:bg-forest/5"
+        >
+          Receipt
+        </button>
+      )}
+      {onDownloadCertificate && (
+        <button
+          type="button"
+          onClick={onDownloadCertificate}
+          className="rounded-lg px-3 py-1.5 text-xs font-semibold text-forest ring-1 ring-forest/20 transition hover:bg-forest/5"
+        >
+          Certificate
         </button>
       )}
       {onDelete && (

@@ -19,6 +19,7 @@ import AdminVolunteers from './admin/pages/AdminVolunteers';
 import AdminContactRequests from './admin/pages/AdminContactRequests';
 import AdminEvents from './admin/pages/AdminEvents';
 import AdminDonations from './admin/pages/AdminDonations';
+import AdminTransactions from './admin/pages/AdminTransactions';
 import AdminGallery from './admin/pages/AdminGallery';
 
 /**
@@ -93,6 +94,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AdminDonations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="transactions"
+              element={
+                <ProtectedRoute>
+                  <AdminTransactions />
                 </ProtectedRoute>
               }
             />

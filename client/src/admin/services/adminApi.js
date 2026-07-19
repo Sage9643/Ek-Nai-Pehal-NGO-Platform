@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 const CSRF_COOKIE_NAME = 'admin_csrf';
 
 /**
@@ -41,7 +41,11 @@ adminApi.interceptors.request.use((config) => {
 adminApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && window.location.pathname !== '/admin/login') {
+    const path = window.location.pathname;
+    const onAdminRoute = path.startsWith('/admin');
+    const onLoginPage = path === '/admin/login';
+
+    if (error.response?.status === 401 && onAdminRoute && !onLoginPage) {
       window.location.href = '/admin/login';
     }
     return Promise.reject(error);
@@ -140,6 +144,16 @@ export const updateGalleryImage = async (id, payload) => {
 
 export const deleteGalleryImage = async (id) => {
   const response = await adminApi.delete(`/gallery/${id}`);
+  return response.data;
+};
+
+export const getTransactions = async (params = {}) => {
+  const response = await adminApi.get('/transactions', { params });
+  return response.data;
+};
+
+export const getTransactionStats = async () => {
+  const response = await adminApi.get('/transactions/stats');
   return response.data;
 };
 

@@ -28,6 +28,7 @@ const {
   updateGalleryImage,
   deleteGalleryImage,
 } = require('../controllers/admin/galleryAdminController');
+const { getTransactions, getTransactionStats } = require('../controllers/admin/transactionAdminController');
 
 const router = express.Router();
 
@@ -142,5 +143,7 @@ router.get('/gallery', getGalleryImages);
 router.post('/gallery', galleryValidation, validate, createGalleryImage);
 router.put('/gallery/:id', galleryValidation, validate, updateGalleryImage);
 router.delete('/gallery/:id', deleteGalleryImage);
+router.get('/transactions', getTransactions);
+router.get('/transactions/stats', getTransactionStats);
 
 module.exports = router;
