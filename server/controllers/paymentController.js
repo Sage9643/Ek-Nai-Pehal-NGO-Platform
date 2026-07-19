@@ -30,7 +30,7 @@ const createOrder = async (req, res, next) => {
 
     const order = await razorpayService.createOrder({
       amountInRupees: amount,
-      receiptId: `order-${crypto.randomUUID()}`,
+      receiptId: crypto.randomUUID(),
       notes: { donorName, donorEmail },
     });
 
@@ -58,6 +58,15 @@ const createOrder = async (req, res, next) => {
       data: {
         orderId: order.id,
         transactionId: transaction._id,
+        // CONTRACT: `amount` here MUST stay in rupees. This is the same
+        // `amount` variable destructured from req.body above — do NOT
+        // replace it with `order.amount`, which is Razorpay's own echo of
+        // what was sent to their API and is denominated in paise. The
+        // frontend (DonationPaymentForm.jsx) performs exactly one
+        // rupees->paise conversion using this value when constructing
+        // Razorpay Checkout options; if this field ever became
+        // paise-denominated instead, that conversion would silently run
+        // on an already-converted value.
         amount,
         currency: order.currency,
         keyId: env.RAZORPAY_KEY_ID,

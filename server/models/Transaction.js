@@ -126,7 +126,7 @@ const transactionSchema = new mongoose.Schema(
     receiptNumber: {
       type: String,
       trim: true,
-      default: null,
+    
     },
  
     // Optional donor note, mirrors the equivalent field on the Donation

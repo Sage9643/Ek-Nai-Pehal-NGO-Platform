@@ -2,15 +2,22 @@ import { useState } from 'react';
 import { createDonation } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 
-const DONATION_TYPES = ['Books',
+// 'Financial Support' intentionally removed: real financial donations now
+// go through DonationPaymentForm.jsx's verified Razorpay payment flow
+// (see Donate.jsx). Keeping it here as a selectable inquiry type would
+// let a donor "donate money" through a path that charges nothing, issues
+// no receipt, and generates no certificate — exactly the duplicated/
+// confusing donation UI this form must not present.
+const DONATION_TYPES = [
+  'Books',
   'Stationery',
   'Educational Material',
   'Clothes',
   'Toys',
   'Sports Equipment',
-  'Financial Support',
-  'Other',];
-const initialForm = { name: '', email: '', phone: '', donationType: '', amount: '', message: '' };
+  'Other',
+];
+const initialForm = { name: '', email: '', phone: '', donationType: '', message: '' };
 
 function DonationForm() {
   const [form, setForm] = useState(initialForm);
@@ -33,10 +40,6 @@ function DonationForm() {
     if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
     else if (!/^[6-9]\d{9}$/.test(form.phone.trim())) newErrors.phone = 'Enter a valid 10-digit mobile number';
     if (!form.donationType) newErrors.donationType = 'Please select a donation type';
-    if (form.donationType === 'Financial Support') {
-      if (!form.amount || !String(form.amount).trim()) newErrors.amount = 'Amount is required';
-      else if (Number(form.amount) <= 0) newErrors.amount = 'Amount must be greater than 0';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -53,7 +56,6 @@ function DonationForm() {
         phone: form.phone,
         donationType: form.donationType,
         message: form.message,
-        ...(form.donationType === 'Financial Support' ? { amount: Number(form.amount) } : {}),
       };
       const response = await createDonation(payload);
       setSuccess(response.message || 'Donation inquiry submitted successfully!');
@@ -88,7 +90,7 @@ function DonationForm() {
             <button
               key={type}
               type="button"
-              onClick={() => { setForm((prev) => ({ ...prev, donationType: type })); setErrors((prev) => ({ ...prev, donationType: '', amount: '' })); }}
+              onClick={() => { setForm((prev) => ({ ...prev, donationType: type })); setErrors((prev) => ({ ...prev, donationType: '' })); }}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 form.donationType === type
                   ? 'bg-saffron text-white shadow-md'
@@ -115,19 +117,10 @@ function DonationForm() {
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="phone" className="form-label">Phone Number <span className="text-saffron normal-case font-normal">*</span></label>
-          <input id="phone" name="phone" type="text" value={form.phone} onChange={handleChange} className="form-input" placeholder="10-digit number" />
-          {errors.phone && <p className="mt-1.5 text-xs text-red-500">{errors.phone}</p>}
-        </div>
-        {form.donationType === 'Financial Support' && (
-          <div>
-            <label htmlFor="amount" className="form-label">Amount (₹) <span className="text-saffron normal-case font-normal">*</span></label>
-            <input id="amount" name="amount" type="number" min="1" value={form.amount} onChange={handleChange} className="form-input" placeholder="Enter amount" />
-            {errors.amount && <p className="mt-1.5 text-xs text-red-500">{errors.amount}</p>}
-          </div>
-        )}
+      <div>
+        <label htmlFor="phone" className="form-label">Phone Number <span className="text-saffron normal-case font-normal">*</span></label>
+        <input id="phone" name="phone" type="text" value={form.phone} onChange={handleChange} className="form-input" placeholder="10-digit number" />
+        {errors.phone && <p className="mt-1.5 text-xs text-red-500">{errors.phone}</p>}
       </div>
 
       <div>

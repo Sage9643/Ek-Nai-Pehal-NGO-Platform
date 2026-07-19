@@ -1,4 +1,5 @@
 import DonationForm from '../components/DonationForm';
+import DonationPaymentForm from '../components/DonationPaymentForm';
 
 const donationCategories = [
   { icon: '📚', title: 'Books & Stationery', desc: 'Supply textbooks, notebooks, and pens to children in need.', impact: 'Equips 1 child for a full academic year' },
@@ -48,15 +49,35 @@ function Donate() {
         </div>
       </section>
 
-      {/* Donation form */}
+      {/* Online payment — real, verified financial donations via Razorpay */}
       <section className="bg-white py-20">
         <div className="page-container">
           <div className="mx-auto max-w-2xl">
             <div className="mb-10 text-center">
-              <span className="eyebrow">Contribute Today</span>
-              <h2 className="mt-3 font-playfair text-4xl font-bold text-forest">Submit Your Donation</h2>
+              <span className="eyebrow">Give Directly</span>
+              <h2 className="mt-3 font-playfair text-4xl font-bold text-forest">Donate Online</h2>
               <p className="mt-3 text-stone-500">
-                Tell us what you&apos;d like to donate and our team will coordinate pickup or transfer.
+                Make a secure online contribution via UPI, cards, or net banking — instantly, safely,
+                with an automatic receipt and donation certificate.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-stone-100 md:p-10">
+              <DonationPaymentForm />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* In-kind donation inquiry */}
+      <section className="bg-ivory py-20">
+        <div className="page-container">
+          <div className="mx-auto max-w-2xl">
+            <div className="mb-10 text-center">
+              <span className="eyebrow">Contribute Today</span>
+              <h2 className="mt-3 font-playfair text-4xl font-bold text-forest">Donate Items &amp; Essentials</h2>
+              <p className="mt-3 text-stone-500">
+                Prefer to donate books, clothes, or supplies instead? Tell us what you&apos;d like to
+                give and our team will coordinate pickup or transfer.
               </p>
             </div>
             <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-stone-100 md:p-10">

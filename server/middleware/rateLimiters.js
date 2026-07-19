@@ -67,6 +67,23 @@ const paymentLimiter = buildLimiter({
 });
 
 /**
+ * Public transaction lookup + PDF downloads (GET /:transactionId,
+ * /receipt.pdf, /certificate.pdf). These endpoints have no authentication
+ * — the transactionId itself is the only access control — and MongoDB
+ * ObjectIds are not cryptographically random (a fixed 5-byte value per
+ * server process plus a small incrementing counter), making nearby IDs
+ * guessable by anyone who obtains one valid reference. This limiter is
+ * generous enough for a genuine donor to view + download both PDFs a
+ * few times, but tight enough to make brute-force enumeration of other
+ * donors' names/amounts impractical.
+ */
+const transactionLookupLimiter = buildLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30,
+  message: 'Too many requests. Please try again later.',
+});
+
+/**
  * Blanket API-wide limiter as defense-in-depth against generic scraping/DoS
  * on read endpoints (events, gallery) that have no other throttle.
  */
@@ -81,5 +98,6 @@ module.exports = {
   chatLimiter,
   formLimiter,
   paymentLimiter,
+  transactionLookupLimiter,
   globalLimiter,
 };

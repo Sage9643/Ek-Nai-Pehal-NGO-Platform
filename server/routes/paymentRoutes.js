@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
-const { paymentLimiter } = require('../middleware/rateLimiters');
+const { paymentLimiter, transactionLookupLimiter } = require('../middleware/rateLimiters');
 const {
   createOrder,
   verifyPayment,
@@ -57,14 +57,16 @@ const verifyPaymentValidation = [
 router.post('/create-order', paymentLimiter, createOrderValidation, validate, createOrder);
 router.post('/verify', paymentLimiter, verifyPaymentValidation, validate, verifyPayment);
 
-// Read-only lookups for the donation receipt page. No dedicated rate
-// limiter beyond the app-wide globalLimiter already applied in app.js —
-// these don't call Razorpay and aren't the scarce resource create-order/
-// verify are. Malformed :transactionId values are handled by the existing
-// Mongoose CastError -> 400 path in errorHandler.js, consistent with how
-// every other :id route in this codebase behaves.
-router.get('/:transactionId', getTransaction);
-router.get('/:transactionId/receipt.pdf', getReceiptPdf);
-router.get('/:transactionId/certificate.pdf', getCertificatePdf);
+// Read-only lookups for the donation receipt page. Rate-limited via
+// transactionLookupLimiter (see middleware/rateLimiters.js) — these
+// endpoints have no authentication, and MongoDB ObjectIds are guessable
+// enough (fixed per-process random bytes + a small incrementing counter)
+// that unrestricted access would let someone enumerate other donors'
+// names and amounts. Malformed :transactionId values are handled by the
+// existing Mongoose CastError -> 400 path in errorHandler.js, consistent
+// with how every other :id route in this codebase behaves.
+router.get('/:transactionId', transactionLookupLimiter, getTransaction);
+router.get('/:transactionId/receipt.pdf', transactionLookupLimiter, getReceiptPdf);
+router.get('/:transactionId/certificate.pdf', transactionLookupLimiter, getCertificatePdf);
 
 module.exports = router;

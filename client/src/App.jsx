@@ -9,6 +9,7 @@ import Events from './pages/Events';
 import Gallery from './pages/Gallery';
 import Volunteer from './pages/Volunteer';
 import Donate from './pages/Donate';
+import DonationReceipt from './pages/DonationReceipt';
 import Contact from './pages/Contact';
 import { AdminAuthProvider } from './admin/context/AdminAuthContext';
 import ProtectedRoute from './admin/components/ProtectedRoute';
@@ -50,6 +51,7 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/volunteer" element={<Volunteer />} />
           <Route path="/donate" element={<Donate />} />
+          <Route path="/donate/receipt/:transactionId" element={<DonationReceipt />} />
           <Route path="/contact" element={<Contact />} />
 
           <Route path="/admin" element={<AdminSection />}>
