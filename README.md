@@ -8,6 +8,7 @@
   <img src="https://img.shields.io/badge/MongoDB-Atlas-success?logo=mongodb"/>
   <img src="https://img.shields.io/badge/Razorpay-Payments-blue"/>
   <img src="https://img.shields.io/badge/Gemini-AI-orange"/>
+  <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white"/>
   <img src="https://img.shields.io/badge/Version-v1.0-blue"/>
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success"/>
 </p>
@@ -142,6 +143,13 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 - Secure Password Hashing
 - Centralized Error Handling
 
+### 🐳 Containerization
+
+- Docker
+- Docker Compose
+- Multi-service Local Development
+- Consistent Development Environment
+
 ---
 
 ## 🏗 Project Architecture
@@ -209,12 +217,13 @@ For a detailed architecture explanation and request flow, see `docs/ARCHITECTURE
 
 - Google Gemini API
 
-### Deployment
+### Deployment & DevOps
 
-- Frontend: Vercel 
+- Frontend: Vercel
 - Backend: Render
 - Database: MongoDB Atlas
-- Containerization: Docker 
+- Docker
+- Docker Compose
 
 ---
 
@@ -231,7 +240,9 @@ Ek-Nai-Pehal-NGO-Platform
 │   │   ├── pages/
 │   │   ├── services/
 │   │   └── data/
-│   └── public/
+│   ├── public/
+│   ├── Dockerfile
+│   └── package.json
 │
 ├── server/
 │   ├── config/
@@ -241,7 +252,9 @@ Ek-Nai-Pehal-NGO-Platform
 │   ├── routes/
 │   ├── services/
 │   ├── seed/
-│   └── server.js
+│   ├── Dockerfile
+│   ├── server.js
+│   └── package.json
 │
 ├── docs/
 │   ├── ARCHITECTURE.md
@@ -252,6 +265,8 @@ Ek-Nai-Pehal-NGO-Platform
 │   ├── SECURITY.md
 │   └── screenshots/
 │
+├── docker-compose.yml
+├── .dockerignore
 ├── README.md
 └── .gitignore
 ```
@@ -296,6 +311,20 @@ npm install
 
 npm run dev
 ```
+
+## 🐳 Docker
+
+Run the complete application locally using Docker Compose.
+
+```bash
+docker compose up --build
+```
+
+Frontend:
+http://localhost:5173
+
+Backend:
+http://localhost:5000
 
 ---
 
@@ -424,6 +453,7 @@ VITE_RAZORPAY_KEY_ID=
 - Donation Certificate Generation
 - Security Hardening
 - Comprehensive Technical Documentation
+- Docker Containerization
 
 ---
 
