@@ -1,13 +1,15 @@
 # Ek Nai Pehal – NGO Management Platform
 
-> A full-stack MERN application designed to digitalize NGO operations by providing volunteer management, donation management, event management, gallery management, and an AI-powered virtual assistant through a secure admin dashboard.
+> A production-ready full-stack MERN application designed to digitalize NGO operations through secure administration, volunteer management, event management, gallery management, donation management, Razorpay payment integration, AI-powered assistance, PDF receipt & certificate generation, and comprehensive engineering documentation.
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18-blue?logo=react"/>
   <img src="https://img.shields.io/badge/Node.js-Express-green?logo=node.js"/>
   <img src="https://img.shields.io/badge/MongoDB-Atlas-success?logo=mongodb"/>
+  <img src="https://img.shields.io/badge/Razorpay-Payments-blue"/>
   <img src="https://img.shields.io/badge/Gemini-AI-orange"/>
-  <img src="https://img.shields.io/badge/Status-Active%20Development-brightgreen"/>
+  <img src="https://img.shields.io/badge/Version-v1.0-blue"/>
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-success"/>
 </p>
 
 ---
@@ -18,7 +20,9 @@
 
 The platform enables visitors to explore NGO initiatives, volunteer, donate, contact the organization, and interact with an AI-powered assistant, while administrators can securely manage all dynamic content through a dedicated dashboard.
 
-Unlike traditional static NGO websites, the platform functions as a lightweight **Content Management System (CMS)** where updates made by administrators are instantly reflected on the public website without modifying any code.
+Unlike traditional static NGO websites, the platform functions as a lightweight **Content Management System (CMS)** where administrators can securely manage website content through a dedicated dashboard.
+
+The application follows production-oriented engineering practices including secure authentication, CSRF protection, rate limiting, centralized error handling, payment verification, PDF generation, and modular controller-service architecture.
 
 ---
 ### 🌐 Live Demo
@@ -28,6 +32,8 @@ Unlike traditional static NGO websites, the platform functions as a lightweight 
 **Backend API:** https://ek-nai-pehal-ngo-platform.onrender.com
 
 **Gallery API:** https://ek-nai-pehal-ngo-platform.onrender.com/api/gallery
+
+**Technical Documentation:** `docs/`
 
 ## ✨ Features
 
@@ -39,7 +45,8 @@ Unlike traditional static NGO websites, the platform functions as a lightweight 
 - Dynamic Events
 - Dynamic Gallery
 - Volunteer Registration
-- Donation Form
+- Donation Inquiry Form
+- Secure Online Donations (Razorpay)
 - Contact Form
 - AI Chatbot powered by Google Gemini
 - Mobile Friendly UI
@@ -67,10 +74,20 @@ It can answer questions regarding:
 
 A secure JWT-authenticated dashboard allows administrators to manage the website without touching the source code.
 
+### 💳 Payment System
+
+- Razorpay Checkout Integration
+- Secure Payment Verification
+- Financial Transaction Tracking
+- PDF Receipt Generation
+- Donation Certificate Generation
+- Transaction History
+
 #### Dashboard
 
 - Live Statistics
 - Recent Activity Feed
+- Transaction Statistics
 
 #### Volunteer Management
 
@@ -99,36 +116,66 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 - Delete Images
 - Featured Images Support
 
-#### Donation Management
+#### Donation Inquiry Management
 
-- View Donations
-- Donation Status Tracking
+- View Donation Requests
 - Update Donation Status
-- Delete Donation Records
+- Delete Donation Requests
+
+#### Transaction Management
+
+- View Financial Donations
+- Search Transactions
+- Payment Status Tracking
+- PDF Receipt Download
+- Donation Certificate Download
+- Transaction Statistics
+
+### 🛡 Security Features
+
+- JWT Authentication
+- HTTP-only Cookies
+- CSRF Protection
+- Rate Limiting
+- Helmet Security Headers
+- Input Validation
+- Secure Password Hashing
+- Centralized Error Handling
 
 ---
 
 ## 🏗 Project Architecture
 
 ```
-                     Public Users
-                          │
-                          ▼
-                  React Frontend
-                          │
-                Axios REST API Calls
-                          │
-                          ▼
-                 Express.js Backend
-                          │
-          ┌───────────────┴──────────────┐
-          │                              │
-          ▼                              ▼
-     MongoDB Atlas                 Gemini AI API
-          │
-          ▼
-    Dynamic Website Content
+                          Public Users
+                                │
+                                ▼
+                       React Frontend (Vite)
+                                │
+                          Axios REST API
+                                │
+                                ▼
+                  Express.js Backend (Node.js)
+                                │
+      ┌──────────────┬──────────────┬──────────────┐
+      │              │              │              │
+      ▼              ▼              ▼              ▼
+ MongoDB Atlas   Razorpay API   Gemini API   JWT Authentication
+      │
+      ▼
+ Business Logic
+ ├── Volunteer Management
+ ├── Event Management
+ ├── Gallery Management
+ ├── Contact Management
+ ├── Donation Management
+ ├── Transaction Management
+ └── PDF Receipt & Certificate Generation
+      │
+      ▼
+ Dynamic NGO Website
 ```
+For a detailed architecture explanation and request flow, see `docs/ARCHITECTURE.md`.
 
 ---
 
@@ -149,6 +196,10 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 - JWT Authentication
 - bcryptjs
 - Mongoose
+- Express Validator
+- Helmet
+- Cookie Parser
+- PDFKit
 
 ### Database
 
@@ -161,7 +212,9 @@ A secure JWT-authenticated dashboard allows administrators to manage the website
 ### Deployment
 
 - Frontend: Vercel 
-- Backend: Render 
+- Backend: Render
+- Database: MongoDB Atlas
+- Containerization: Docker 
 
 ---
 
@@ -190,11 +243,31 @@ Ek-Nai-Pehal-NGO-Platform
 │   ├── seed/
 │   └── server.js
 │
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── API_DOCUMENTATION.md
+│   ├── DATABASE_SCHEMA.md
+│   ├── DEPLOYMENT.md
+│   ├── ENGINEERING_DECISIONS.md
+│   ├── SECURITY.md
+│   └── screenshots/
+│
 ├── README.md
 └── .gitignore
 ```
 
 ---
+
+## 📚 Documentation
+
+Detailed engineering documentation is available inside the `docs` directory.
+
+- Architecture
+- API Documentation
+- Database Schema
+- Security Guide
+- Deployment Guide
+- Engineering Decisions
 
 ## 🚀 Installation
 
@@ -231,22 +304,44 @@ npm run dev
 ### Backend (.env)
 
 ```env
-# Server
+# ==============================
+# Server Configuration
+# ==============================
 PORT=5000
+NODE_ENV=development
 
-# MongoDB
+# ==============================
+# Database
+# ==============================
 MONGODB_URI=
 
-# Gemini API
-GEMINI_API_KEY=
+# ==============================
+# Authentication
+# ==============================
+JWT_SECRET=
+JWT_EXPIRES_IN=7d
 
+# ==============================
 # Admin Credentials
+# ==============================
 ADMIN_EMAIL=
 ADMIN_PASSWORD_HASH=
 
-# Authentication
-JWT_SECRET=
-JWT_EXPIRES_IN=7d
+# ==============================
+# Google Gemini
+# ==============================
+GEMINI_API_KEY=
+
+# ==============================
+# Razorpay
+# ==============================
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+
+# ==============================
+# Frontend URL (for CORS)
+# ==============================
+CLIENT_URL=http://localhost:5173
 ```
 
 ---
@@ -254,9 +349,18 @@ JWT_EXPIRES_IN=7d
 ### Frontend (.env)
 
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api   # Local
-# Production:
-# https://ek-nai-pehal-ngo-platform.onrender.com/api
+# ==============================
+# Backend API
+# ==============================
+VITE_API_BASE_URL=http://localhost:5000/api
+
+# Production
+# VITE_API_BASE_URL=https://ek-nai-pehal-ngo-platform.onrender.com/api
+
+# ==============================
+# Razorpay
+# ==============================
+VITE_RAZORPAY_KEY_ID=
 ```
 
 ---
@@ -266,37 +370,37 @@ VITE_API_BASE_URL=http://localhost:5000/api   # Local
 ###  Home Page
 
 <p>
-  <img src="docs/home.png" width="900"/>
+  <img src="docs/screenshots/home.png" width="900"/>
 </p>
 
 ###  Admin Dashboard
 
 <p>
-  <img src="docs/admin-dashboard.png" width="900"/>
+  <img src="docs/screenshots/admin-dashboard.png" width="900"/>
 </p>
 
 ###  AI Chatbot
 
 <p>
-  <img src="docs/chatbot.png" width="300"/>
+  <img src="docs/screenshots/chatbot.png" width="300"/>
 </p>
 
 ###  Events
 
 <p>
-  <img src="docs/events.png" width="900"/>
+  <img src="docs/screenshots/events.png" width="900"/>
 </p>
 
 ###  Gallery
 
 <p>
-  <img src="docs/gallery.png" width="900"/>
+  <img src="docs/screenshots/gallery.png" width="900"/>
 </p>
 
 ###  Donation Portal
 
 <p>
-  <img src="docs/donation.png" width="900"/>
+  <img src="docs/screenshots/donation.png" width="900"/>
 </p>
 
 
@@ -304,34 +408,34 @@ VITE_API_BASE_URL=http://localhost:5000/api   # Local
 
 ## 🎯 Current Status
 
-#### ✅ Implemented
+### ✅ Version 1.0
 
+- Production Deployment
 - JWT Authentication
 - AI Chatbot
 - Dynamic Events
 - Dynamic Gallery
 - Volunteer Management
 - Contact Management
-- Donation Management
-- Admin Dashboard
-- MongoDB Integration
-- Responsive Design
+- Donation Inquiry Management
+- Razorpay Payment Gateway
+- Financial Transaction Management
+- PDF Receipt Generation
+- Donation Certificate Generation
+- Security Hardening
+- Comprehensive Technical Documentation
 
 ---
 
-#### 🚧 Under Development
+### 🚧 Planned Enhancements
 
-The project is actively being improved with the following planned features:
-
-- 💳 Razorpay / Stripe Payment Gateway
-- 📧 Email Notifications
-- 📈 Analytics Dashboard
-- ☁️ Cloudinary Image Uploads
-- 👥 Multi-admin Support
-- 📰 Blog & News Module
-- 🔒 Role-Based Access Control
-- 📑 Donation Receipts
-- 📊 Export Reports (CSV/PDF)
+- Email Notifications
+- Razorpay Webhooks
+- Analytics Dashboard
+- Cloudinary Image Storage
+- Multi-admin Support
+- Role-Based Access Control (RBAC)
+- Blog & News Module
 
 ---
 
