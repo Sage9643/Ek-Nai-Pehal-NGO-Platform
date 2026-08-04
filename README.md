@@ -10,7 +10,6 @@
   <img src="https://img.shields.io/badge/Gemini-AI-orange"/>
   <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white"/>
   <img src="https://img.shields.io/badge/Version-v1.0-blue"/>
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-success"/>
 </p>
 
 ---
